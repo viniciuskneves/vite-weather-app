@@ -2,9 +2,7 @@
   <router-view v-slot="{ Component }">
     <Error v-if="error" />
     <Suspense timeout="0" v-else>
-      <template #default>
-        <component :is="Component" />
-      </template>
+      <component :is="Component" />
       <template #fallback>
         <Loading />
       </template>
