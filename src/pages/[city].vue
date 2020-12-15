@@ -1,7 +1,6 @@
 <template>
-  <loading v-if="isLoading" />
   <success
-    v-else-if="isSuccess"
+    v-if="isSuccess"
     :city="weatherData.city"
     :weather="weatherData.weather"
     :temperature="weatherData.temperature"
@@ -14,14 +13,12 @@ import { ref, computed } from 'vue';
 
 // Components
 import Success from '../components/Success.vue';
-import Loading from '../components/Loading.vue';
 import Error from '../components/Error.vue';
 
 // Services
 import { getCurrentWeather } from '../services/openWeather.js';
 
 const STATES = {
-  LOADING: 'LOADING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERRROR',
 };
@@ -30,7 +27,6 @@ export default {
   name: 'City',
   components: {
     Success,
-    Loading,
     Error,
   },
   props: {
@@ -40,10 +36,9 @@ export default {
     },
   },
   async setup(props) {
-    const state = ref(STATES.LOADING);
+    const state = ref(null);
     const weatherData = ref({});
 
-    const isLoading = computed(() => state.value === STATES.LOADING);
     const isSuccess = computed(() => state.value === STATES.SUCCESS);
     const isError = computed(() => state.value === STATES.ERROR);
 
@@ -62,7 +57,7 @@ export default {
       state.value = STATES.ERROR;
     }
 
-    return { state, weatherData, isLoading, isSuccess, isError };
+    return { state, weatherData, isSuccess, isError };
   },
 };
 </script>

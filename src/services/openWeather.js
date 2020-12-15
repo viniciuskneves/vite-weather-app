@@ -17,9 +17,16 @@ const WEATHER_TYPE_EMOJI_MAP = {
   TORNADO: '🌪',
 };
 
+function asyncSetTimeout() {
+  return new Promise(resolve => setTimeout(resolve, 2000));
+}
+
 export async function getCurrentWeather(city) {
   const path = '/weather';
-  const response = await fetch(`${BASE_URL}${path}?q=${city}&appid=${API_KEY}&units=metric`);
+  const [ response ] = await Promise.all([
+    fetch(`${BASE_URL}${path}?q=${city}&appid=${API_KEY}&units=metric`),
+    asyncSetTimeout(),
+  ]);
 
   return response.json();
 }
