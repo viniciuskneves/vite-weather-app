@@ -39,7 +39,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+  async setup(props) {
     const state = ref(STATES.LOADING);
     const weatherData = ref({});
 
@@ -47,22 +47,20 @@ export default {
     const isSuccess = computed(() => state.value === STATES.SUCCESS);
     const isError = computed(() => state.value === STATES.ERROR);
 
-    (async function fetchCityWeather() {
-      try {
-        const weatherResponse = await getCurrentWeather(props.city);
+    try {
+      const weatherResponse = await getCurrentWeather(props.city);
 
-        weatherData.value = {
-          city: weatherResponse.name,
-          weather: weatherResponse.weather[0].main,
-          temperature: weatherResponse.main.temp,
-        };
-        state.value = STATES.SUCCESS;
-      } catch(e) {
-        console.error(e);
+      weatherData.value = {
+        city: weatherResponse.name,
+        weather: weatherResponse.weather[0].main,
+        temperature: weatherResponse.main.temp,
+      };
+      state.value = STATES.SUCCESS;
+    } catch(e) {
+      console.error(e);
 
-        state.value = STATES.ERROR;
-      }
-    })();
+      state.value = STATES.ERROR;
+    }
 
     return { state, weatherData, isLoading, isSuccess, isError };
   },
