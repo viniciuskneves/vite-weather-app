@@ -11,9 +11,6 @@ import { getCurrentWeather } from '../services/openWeather.js';
 
 export default {
   name: 'City',
-  components: {
-    Success,
-  },
   props: {
     city: {
       type: String,
