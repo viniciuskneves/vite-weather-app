@@ -1,16 +1,10 @@
 <template>
-  <success
-    :city="weatherData.city"
-    :weather="weatherData.weather"
-    :temperature="weatherData.temperature"
-  />
+  <h1>Weather in {{ weatherData.city }}</h1>
+  <p>{{ Math.round(weatherData.temperature) }}°C - {{ weatherData.weatherEmoji }}</p>
 </template>
 
 <script>
 import { ref } from 'vue';
-
-// Components
-import Success from '../components/Success.vue';
 
 // Services
 import { getCurrentWeather } from '../services/openWeather.js';
