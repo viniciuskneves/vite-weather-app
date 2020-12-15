@@ -13,7 +13,6 @@ import { ref, computed } from 'vue';
 
 // Components
 import Success from '../components/Success.vue';
-import Loading from '../components/Loading.vue';
 import Error from '../components/Error.vue';
 
 // Services
