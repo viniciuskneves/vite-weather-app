@@ -3,32 +3,25 @@
   <p>{{ Math.round(weatherData.temperature) }}°C - {{ weatherData.weatherEmoji }}</p>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script setup>
+import { defineProps, ref } from 'vue';
 
 // Services
 import { getCurrentWeather } from '../services/openWeather.js';
 
-export default {
-  name: 'City',
-  props: {
-    city: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  city: {
+    type: String,
+    required: true,
   },
-  async setup(props) {
-    const weatherData = ref({});
+});
 
-    const weatherResponse = await getCurrentWeather(props.city);
+const weatherData = ref({});
+const weatherResponse = await getCurrentWeather(props.city);
 
-    weatherData.value = {
-      city: weatherResponse.name,
-      weather: weatherResponse.weather[0].main,
-      temperature: weatherResponse.main.temp,
-    };
-
-    return { weatherData };
-  },
+weatherData.value = {
+  city: weatherResponse.name,
+  weather: weatherResponse.weather[0].main,
+  temperature: weatherResponse.main.temp,
 };
 </script>

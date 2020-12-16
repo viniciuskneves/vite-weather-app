@@ -2,9 +2,7 @@
   <router-view v-slot="{ Component }">
     <Error v-if="error" />
     <Suspense timeout="0" v-else>
-      <template #default>
-        <component :is="Component" />
-      </template>
+      <component :is="Component" />
       <template #fallback>
         <Loading />
       </template>
@@ -12,26 +10,18 @@
   </router-view>
 </template>
 
-<script>
+<script setup>
 import { ref, onErrorCaptured } from 'vue';
 
 // Components
 import Loading from './components/Loading.vue';
 import Error from './components/Error.vue';
 
-export default {
-  name: 'App',
-  components: { Loading, Error },
-  setup() {
-    const error = ref(null);
+const error = ref(null);
 
-    onErrorCaptured(e => {
-      error.value = e;
+onErrorCaptured(e => {
+  error.value = e;
 
-      return true;
-    });
-
-    return { error };
-  }
-}
+  return true;
+});
 </script>
