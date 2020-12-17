@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
+
 // Components
 import Success from '../components/Success.vue';
 import Loading from '../components/Loading.vue';
@@ -19,7 +21,6 @@ import Error from '../components/Error.vue';
 import { getCurrentWeather } from '../services/openWeather.js';
 
 const STATES = {
-  INITIAL: '',
   LOADING: 'LOADING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERRROR',
@@ -38,45 +39,32 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      state: STATES.INITIAL,
-      weatherData: {},
-    };
-  },
-  computed: {
-    isLoading() {
-      return this.state === STATES.LOADING;
-    },
-    isSuccess() {
-      return this.state === STATES.SUCCESS;
-    },
-    isError() {
-      return this.state === STATES.ERROR;
-    }
-  },
-  created() {
-    this.fetchCityWeather();
-  },
-  methods: {
-    async fetchCityWeather() {
-      this.state =  STATES.LOADING;
+  setup(props) {
+    const state = ref(STATES.LOADING);
+    const weatherData = ref({});
 
+    const isLoading = computed(() => state.value === STATES.LOADING);
+    const isSuccess = computed(() => state.value === STATES.SUCCESS);
+    const isError = computed(() => state.value === STATES.ERROR);
+
+    (async function fetchCityWeather() {
       try {
-        const weatherData = await getCurrentWeather(this.city);
+        const weatherResponse = await getCurrentWeather(props.city);
 
-        this.weatherData = {
-          city: weatherData.name,
-          weather: weatherData.weather[0].main,
-          temperature: weatherData.main.temp,
+        weatherData.value = {
+          city: weatherResponse.name,
+          weather: weatherResponse.weather[0].main,
+          temperature: weatherResponse.main.temp,
         };
-        this.state = STATES.SUCCESS;
+        state.value = STATES.SUCCESS;
       } catch(e) {
         console.error(e);
 
-        this.state = STATES.ERROR;
+        state.value = STATES.ERROR;
       }
-    },
+    })();
+
+    return { state, weatherData, isLoading, isSuccess, isError };
   },
 };
 </script>
